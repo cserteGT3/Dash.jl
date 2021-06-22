@@ -1,3 +1,5 @@
-import JSON, JSON2, PlotlyBase
+import JSON, JSON3, .PlotlyBase
 
-JSON2.write(io::IO, p::PlotlyBase.Plot; kwargs...) = write(io, JSON.json(p))
+JSON3.StructTypes.StructType(::Type{<:PlotlyBase.Plot}) = JSON3.RawType()
+
+JSON3.rawbytes(p::PlotlyBase.Plot) = JSON.json(p)

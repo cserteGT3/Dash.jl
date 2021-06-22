@@ -1,12 +1,12 @@
 module Dash
 using DashBase
-import HTTP, JSON2, CodecZlib, MD5
+import HTTP, JSON3, CodecZlib, MD5
 using Sockets
+using Requires
 const ROOT_PATH = realpath(joinpath(@__DIR__, ".."))
 const RESOURCE_PATH = realpath(joinpath(ROOT_PATH, "resources"))
 include("exceptions.jl")
 include("Components.jl")
-include("Front.jl")
 include("HttpHelpers/HttpHelpers.jl")
 
 using .HttpHelpers
@@ -133,7 +133,13 @@ function __init__()
     )
 
 
+    # `Front.jl` is the only place there PlotlyBase is used, so place it under @require
+    @require PlotlyBase = "a03496cd-edff-5a9b-9e67-9cda94a718b5" include("Front.jl")
+
 end
+
+JSON3.StructTypes.StructType(::Type{DashBase.Component}) = JSON3.StructTypes.Struct()
+JSON3.StructTypes.excludes(::Type{DashBase.Component}) = (:name, :available_props, :wildcard_regex)
 
 
 end # module

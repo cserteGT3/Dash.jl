@@ -1,6 +1,6 @@
 using Test
 using Dash
-using JSON2
+using JSON3
 using SnoopCompile
 using HTTP
 @testset "dev" begin
@@ -15,7 +15,7 @@ styles = (
 
 
 
-app = dash(external_stylesheets=external_stylesheets) 
+app = dash(external_stylesheets=external_stylesheets)
 app.layout = html_div() do
         html_div(className="three columns") do
         end,
@@ -30,7 +30,7 @@ app.layout = html_div() do
 
 function pretty_json(t)
     io = IOBuffer()
-    JSON2.pretty(io, JSON2.write(t), offset = 2)
+    JSON3.pretty(io, JSON3.write(t), offset = 2)
     return String(take!(io))
 end
 
@@ -40,7 +40,7 @@ println("====")
 @time handler = Dash.make_handler(app)
 @time handler = Dash.make_handler(app)
 println("====")
-inf_timing = @snoopi HTTP.handle(handler, HTTP.Request("GET", "/")) 
+inf_timing = @snoopi HTTP.handle(handler, HTTP.Request("GET", "/"))
 t = 0.
 for itm in inf_timing
     @show itm
